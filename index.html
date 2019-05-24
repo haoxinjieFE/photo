@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+      #video {
+        display: block;
+        margin: 20px auto;
+      }
+      #output {
+        margin: 50px auto 0 auto;
+      }
+
+      #output img {
+        width: 200px;
+        margin-left: 30px;
+        margin-bottom: 20px;
+        box-shadow:0 5px 25px #cccccc;
+        transform: scale(0.9);
+        transition: all .5s;
+        border-radius: 8px;
+      }
+
+      #output img:hover {
+        box-shadow:0 5px 25px #cccccc;
+        transform: scale(1.1);
+      }
+
+      #output img:nth-child(1) {
+        margin-left: 0;
+      }
+
+      #tips p {
+        
+      }
+
+      #tips {
+        margin-left: 20px;
+        margin-bottom: 30px;
+        padding-left: 20px;
+        font-weight: bold;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        animation:  changeColor 5s linear  infinite alternate ;
+      }
+
+      #tips img {
+        width: 100px;
+        height: 100px;
+        margin-left: 10px;
+        transform: scale(1);
+      }
+
+      #tips img:hover {
+        box-shadow:0 5px 25px #cccccc;
+        transform: scale(1);
+      }
+
+      @keyframes changeColor {
+        0% {
+          color: red
+        }
+        25% {
+          color: green
+        }
+        50% {
+          color: yellow
+        }
+        75% {
+          color: 	#FF69B4
+        }
+        100% {
+          color: #9932CC
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <video
+      id="video"
+      controls="controls"
+      width="400"
+      height="300"
+      controls
+      crossOrigin="anonymous"
+      muted
+    >
+      <source
+        src="http://lc-vkpyiowl.cn-n1.lcfile.com/47b1e12894733689eae4/demo.mp4"
+      />
+    </video>
+    <div id="output">
+      <div id="tips">
+          <p>我搞不到你的图? 看好每一帧...</p>
+          <img src="./he.jpg" alt="">
+      </div>
+      
+    </div>
+    <script type="text/javascript">
+      window.onload = function() {
+        (function() {
+        let output = document.getElementById("output");
+        let video = document.getElementById("video");
+        let scale = 0.8;
+        let initialize = function() {
+          video.addEventListener("play", captureImage);
+        };
+        let captureImage = function() {
+          const timer = setInterval(() => {
+            video.addEventListener("pause", () => {
+                clearInterval(timer);
+            });
+            video.addEventListener("ended", () => {
+                clearInterval(timer);
+            });
+            draw();
+          }, 1000);
+        };
+
+        let draw = () => {
+          let canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth * scale;
+          canvas.height = video.videoHeight * scale;
+          canvas
+            .getContext("2d")
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          let img = document.createElement("img");
+          img.crossOrigin = "anonymous";
+          img.src = canvas.toDataURL("image/png");
+          img.width = 400;
+          img.height = 300;
+          output.appendChild(img);
+        };
+        initialize();
+        setTimeout(() => {
+          video.play();
+        }, 3000);
+        
+      })();
+      }
+    </script>
+  </body>
+</html>
